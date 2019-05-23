@@ -1,4 +1,4 @@
-#Thumbs Collector</h1>
+<h1>Thumbs Collector</h1>
 
 | ICON    | INFO      | VIDEO       |
 |-----------|-----------|------------|
