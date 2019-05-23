@@ -110,18 +110,17 @@ namespace thumbsCollector
                 //print STATISTICS 
                 printAndExport.printResults(thumbsCopied, thumbsNon, badGeometries);
                 printAndExport.resultsToFile(geometryInUse, badGeometries, inputSeason);
-
-
-                Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
-                var isGenerate = getSeasonalInfo.isApproved();
-
-                if (isGenerate)
-                {
-                    printAndExport.createOutputFileForEndOfSeason(inputSeason);
-                }
-
-                Console.ReadLine();
             }
+
+            Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
+            var isGenerate = getSeasonalInfo.isApproved();
+
+            if (isGenerate)
+            {
+                printAndExport.createOutputFileForEndOfSeason(inputSeason);
+            }
+
+            Console.ReadLine();
         }
 
         public static void TraceCopying(string inputGarment,string frontSide,string backSide,string extension,string thumbnailsFolder,
