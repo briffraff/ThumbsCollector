@@ -1,5 +1,6 @@
 # Thumbs Collector
-<div>https://i.imgur.com/kBwqu55.png</div>
+
+<img src="https://github.com/briffraff/ThumbsCollector/blob/master/TC_icon.png" alt="ThumbsCollector logo"/>
 
 With this Tool you could collect all .png files (thumbnails) accordingly given part of the name(production season or brand) in a specified folder. 
 Then - create a list if there are any wrong names to fix. 
