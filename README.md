@@ -4,4 +4,4 @@ With this Tool you could collect all .png files (thumbnails) accordingly given p
 Then - create a list if there are any wrong names to fix. 
 Secondary - create an excell sheet with used 3d geometries + sku codes and syles.
 
-<div><h4>Video :</h4> <a href="https://www.dropbox.com/s/uxocamjronob963/ThumbsCollector_.mp4?dl=0">Demo</a></div>
+<div>Video : <a href="https://www.dropbox.com/s/uxocamjronob963/ThumbsCollector_.mp4?dl=0">Demo</a></div>
