@@ -1,6 +1,6 @@
 # Thumbs Collector
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="kBwqu55"><a href="//imgur.com/kBwqu55"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="kBwqu55"><a href="https://i.imgur.com/kBwqu55.png"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 With this Tool you could collect all .png files (thumbnails) accordingly given part of the name(production season or brand) in a specified folder. 
 Then - create a list if there are any wrong names to fix. 
