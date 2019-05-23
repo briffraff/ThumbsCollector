@@ -44,8 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Excel\ExcelApp.cs" />
+    <Compile Include="GlobalConstants.cs" />
+    <Compile Include="Input\getInfo.cs" />
+    <Compile Include="Output\printAndExport.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validations\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

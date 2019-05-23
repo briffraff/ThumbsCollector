@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using thumbsCollector.Input;
+using thumbsCollector.Output;
+using thumbsCollector.Validations;
 
 namespace thumbsCollector
 {
@@ -14,104 +17,53 @@ namespace thumbsCollector
     {
         static void Main(string[] args)
         {
+            GlobalConstants gc = new GlobalConstants();
+
             Console.WriteLine("........................");
             Console.WriteLine("....THUMBS COLLECTOR....");
             Console.WriteLine("........................");
             Console.WriteLine();
 
-            string pathRootMWEQ = @"M:\MD_N\Garments"; // the root folder for Men-Women-Equipment Garments
-            string pathRootYA = @"M:\MD_N\Garments YA"; // the root folder for Young Athletes Garments
-            string pathRootPlusSize = @"M:\MD_N\Garments PS"; // the root folder for PlusSize Garments
-
             Console.Write("SEASON :");
             Console.WriteLine();
 
-            var inputSeason = Console.ReadLine().ToUpper();
+            getInfo getSeasonalInfo = new getInfo();
+            string inputSeason = getSeasonalInfo.currentSeason();
 
-            if (inputSeason.Length != 4)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"Season \"{inputSeason}\" isn't correct!");
-            }
+            Validator validator = new Validator(inputSeason);
+            validator.ValidateSeason();
+            string validationPattern = validator.Pattern();
 
-            string validationPattern = @"\bT_(?<garment>[N|S]\d{2}[A-Z]\d{3})_(?<season>" + inputSeason + @")_(?<category>[A-Z][A-Z])_(?<sku>.{6})-.{3}_D\b";
+            var allFiles = getSeasonalInfo.AllFiles();
+            var geometryInUse = getSeasonalInfo.GeometryInUse(allFiles, validationPattern);
 
-            List<string> allFiles = new List<string>();
-
-            string[] filesPathsMWEQ = Directory.GetFiles(pathRootMWEQ, "*.psd", SearchOption.AllDirectories); //getting the files
-            string[] filesPathsYA = Directory.GetFiles(pathRootYA, "*.psd", SearchOption.AllDirectories); //getting the files
-            string[] filesPathsPlusSize = Directory.GetFiles(pathRootPlusSize, "*.psd", SearchOption.AllDirectories); //getting the files
-            //string[] filesPathsFTW = Directory.GetFiles(pathRootFTW, "*.psd", SearchOption.AllDirectories); //getting the files
-
-            //write the paths to the empty list
-            foreach (var path in filesPathsMWEQ)
-            {
-                allFiles.Add(path);
-            }
-
-            foreach (var path in filesPathsYA)
-            {
-                allFiles.Add(path);
-            }
-
-            foreach (var path in filesPathsPlusSize)
-            {
-                allFiles.Add(path);
-            }
-
-            //foreach (var path in filesPathsFTW)
-            //{
-            //    allFiles.Add(path);
-            //}
-
-            HashSet<string> geometryInUse = new HashSet<string>();
-
-            foreach (var file in allFiles)
-            {
-                var matches = Regex.Matches(file, validationPattern);
-
-                foreach (Match match in matches)
-                {
-                    var currentGeometry = match.Groups["garment"].ToString();
-                    geometryInUse.Add(currentGeometry);
-                }
-            }
-
-            ;
             //main thumbs folder
-            string thumbnailsFolder = @"M:\MD_N\Thumbs\";
+            string thumbnailsFolder = gc.thumbnailsFolder;
 
             //enter directory where you want to save thumbs
             Console.WriteLine();
             Console.WriteLine("Please enter directory to save thumbs:".ToUpper());
-            string dest = Console.ReadLine();
-            string destinationPath = !dest.EndsWith("\\") ? dest + "\\" : dest;
+            string destinationPath = getSeasonalInfo.DestinationTo();
 
             Console.WriteLine();
             Console.WriteLine($"DO YOU WANT TO COLLECT ALL \"{inputSeason}\" THUMBNAILS? (Y/N)");
-            string yesOrNo = Console.ReadLine().ToUpper();
-            var isAllThumbs = yesOrNo == "Y" ? true : false;
+            var isAllThumbs = getSeasonalInfo.isApproved();
 
-            string frontSide = "-A";
-            string backSide = "-B";
-            string extension = ".png";
+            string frontSide = gc.frontSide;
+            string backSide = gc.backSide;
+            string extension = gc.extension;
+            string[] allowedExtensions = gc.allowedExtensions;
             int thumbsCopied = 0;
             int thumbsNon = 0;
             bool isEnd;
-            string[] allowedExtensions = new[] { "-a.png", "-b.png" };
 
-            //Initialise the the lists
-            List<string> collectedPaths = new List<string>();
+            ////Scan thumbs folder
+            List<string> collectedPaths = getSeasonalInfo.ScanThumbsFolder(thumbnailsFolder, allowedExtensions);
             StringBuilder badGeometries = new StringBuilder();
-
-            ////Scan the folders
-            collectedPaths = Directory.GetFiles(thumbnailsFolder, "*.*", SearchOption.AllDirectories)
-               .Where(x => allowedExtensions.Any(x.ToLower().EndsWith)).ToList();
-            
 
             string inputGarment = "";
 
-            if (isAllThumbs == true)
+            if (isAllThumbs)
             {
                 foreach (var geometry in geometryInUse)
                 {
@@ -163,8 +115,8 @@ namespace thumbsCollector
                 }
 
                 //print STATISTICS 
-                printResults(thumbsCopied, thumbsNon, badGeometries);
-                resultsToFile(geometryInUse, badGeometries, inputSeason);
+                printAndExport.printResults(thumbsCopied, thumbsNon, badGeometries);
+                printAndExport.resultsToFile(geometryInUse, badGeometries, inputSeason);
             }
 
             if (isAllThumbs == false)
@@ -221,64 +173,19 @@ namespace thumbsCollector
                 }
 
                 //print STATISTICS 
-                printResults(thumbsCopied, thumbsNon, badGeometries);
-                resultsToFile(geometryInUse, badGeometries, inputSeason);
+                printAndExport.printResults(thumbsCopied, thumbsNon, badGeometries);
+                printAndExport.resultsToFile(geometryInUse, badGeometries, inputSeason);
             }
 
             Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
-            yesOrNo = Console.ReadLine().ToUpper();
-            bool isGenerate = yesOrNo == "Y" ? true : false;
+            var isGenerate = getSeasonalInfo.isApproved();
 
-            if (isGenerate == true)
+            if (isGenerate)
             {
-                createOutputFileForEndOfSeason(inputSeason);
+                printAndExport.createOutputFileForEndOfSeason(inputSeason);
             }
 
             Console.ReadLine();
         }
-
-       // private static List<string> 
-
-        private static void createOutputFileForEndOfSeason(string inputSeason)
-        {
-            Console.WriteLine($"GENERATE LIST OF GEOEMETRIES/SKUS USED BY {inputSeason}:");
-
-            //TODO IMPLEMENTATION LOGIC FOR CREATING THIS LIST (Probably in excell sheet);
-
-        }
-
-        private static void printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Thumbs copied: {thumbsCopied} = {thumbsCopied / 2} garments");
-            Console.WriteLine($"Thumbs non copied: {thumbsNon} = {thumbsNon / 2} garments");
-            Console.WriteLine();
-
-            if (thumbsNon != 0)
-            {
-                Console.WriteLine("[THUMBS MISSING:...");
-                Console.WriteLine();
-                Console.WriteLine(badGeometries);
-            }
-        }
-
-        private static void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason)
-        {
-            var pathToResults = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\assignmanager\ThumbsCollector\Results\";
-            var resultFile = $"{inputSeason.ToUpper()} - geometries.txt";
-            var badFileName = $"MissingThumbs - {inputSeason.ToUpper()}.txt";
-
-            StringBuilder result = new StringBuilder();
-
-            foreach (var geometry in geometryInUse)
-            {
-                result.AppendLine(geometry);
-            }
-
-            File.WriteAllText(pathToResults + resultFile, result.ToString());
-
-            File.WriteAllText(pathToResults + badFileName, badGeometries.ToString());
-        }
-
     }
 }
