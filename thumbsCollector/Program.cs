@@ -1,12 +1,7 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using thumbsCollector.Input;
 using thumbsCollector.Output;
 using thumbsCollector.Validations;
@@ -80,38 +75,8 @@ namespace thumbsCollector
                         break;
                     }
 
-                    string garmentNameF = (inputGarment + frontSide + extension);
-                    string garmentNameB = (inputGarment + backSide + extension);
-
-                    //check/copy front
-                    if (File.Exists(thumbnailsFolder + garmentNameF)
-                        && collectedPaths.Contains(thumbnailsFolder + garmentNameF))
-                    {
-                        File.Copy(thumbnailsFolder + garmentNameF, destinationPath + garmentNameF, true);
-                        thumbsCopied += 1;
-                        Console.WriteLine("OK! - FRONT THUMB EXISTS");
-                    }
-                    else
-                    {
-                        thumbsNon += 1;
-                        badGeometries.AppendLine(" " + garmentNameF);
-                        Console.WriteLine("NO! - FRONT THUMB NOT EXISTS");
-                    }
-
-                    //check/copy back
-                    if (File.Exists(thumbnailsFolder + garmentNameB)
-                        && collectedPaths.Contains(thumbnailsFolder + garmentNameB))
-                    {
-                        File.Copy(thumbnailsFolder + garmentNameB, destinationPath + garmentNameB, true);
-                        thumbsCopied += 1;
-                        Console.WriteLine("OK! - BACK THUMB EXISTS");
-                    }
-                    else
-                    {
-                        thumbsNon += 1;
-                        badGeometries.AppendLine(" " + garmentNameB);
-                        Console.WriteLine("NO! - BACK THUMB NOT EXISTS");
-                    }
+                    TraceCopying(inputGarment,frontSide,backSide,extension,thumbnailsFolder,
+                        destinationPath,thumbsCopied,thumbsNon,badGeometries,collectedPaths);
                 }
 
                 //print STATISTICS 
@@ -137,55 +102,65 @@ namespace thumbsCollector
                         break;
                     }
 
-                    string garmentNameF = (inputGarment + frontSide + extension);
-                    string garmentNameB = (inputGarment + backSide + extension);
+                    TraceCopying(inputGarment,frontSide,backSide,extension,thumbnailsFolder,
+                        destinationPath,thumbsCopied,thumbsNon,badGeometries,collectedPaths);
 
-                    //check/copy front
-                    if (File.Exists(thumbnailsFolder + garmentNameF)
-                        && collectedPaths.Contains(thumbnailsFolder + garmentNameF))
-                    {
-                        File.Copy(thumbnailsFolder + garmentNameF, destinationPath + garmentNameF, true);
-                        thumbsCopied += 1;
-                        Console.WriteLine("OK! - FRONT THUMB EXISTS");
-                    }
-                    else
-                    {
-                        thumbsNon += 1;
-                        badGeometries.AppendLine(" " + garmentNameF);
-                        Console.WriteLine("NO! - FRONT THUMB NOT EXISTS");
-
-                    }
-
-                    //check/copy back
-                    if (File.Exists(thumbnailsFolder + garmentNameB)
-                        && collectedPaths.Contains(thumbnailsFolder + garmentNameB))
-                    {
-                        File.Copy(thumbnailsFolder + garmentNameB, destinationPath + garmentNameB, true);
-                        thumbsCopied += 1;
-                        Console.WriteLine("OK! - BACK THUMB EXISTS");
-                    }
-                    else
-                    {
-                        thumbsNon += 1;
-                        badGeometries.AppendLine(" " + garmentNameB);
-                        Console.WriteLine("NO! - BACK THUMB NOT EXISTS");
-                    }
                 }
 
                 //print STATISTICS 
                 printAndExport.printResults(thumbsCopied, thumbsNon, badGeometries);
                 printAndExport.resultsToFile(geometryInUse, badGeometries, inputSeason);
+
+
+                Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
+                var isGenerate = getSeasonalInfo.isApproved();
+
+                if (isGenerate)
+                {
+                    printAndExport.createOutputFileForEndOfSeason(inputSeason);
+                }
+
+                Console.ReadLine();
             }
+        }
 
-            Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
-            var isGenerate = getSeasonalInfo.isApproved();
+        public static void TraceCopying(string inputGarment,string frontSide,string backSide,string extension,string thumbnailsFolder,
+            string destinationPath,int thumbsCopied,int thumbsNon,StringBuilder badGeometries,List<string> collectedPaths
+            )
+        {
+            string garmentNameF = (inputGarment + frontSide + extension);
+            string garmentNameB = (inputGarment + backSide + extension);
 
-            if (isGenerate)
+            //check/copy front
+            if (File.Exists(thumbnailsFolder + garmentNameF)
+                && collectedPaths.Contains(thumbnailsFolder + garmentNameF))
             {
-                printAndExport.createOutputFileForEndOfSeason(inputSeason);
+                File.Copy(thumbnailsFolder + garmentNameF, destinationPath + garmentNameF, true);
+                thumbsCopied += 1;
+                Console.WriteLine("OK! - FRONT THUMB EXISTS");
+            }
+            else
+            {
+                thumbsNon += 1;
+                badGeometries.AppendLine(" " + garmentNameF);
+                Console.WriteLine("NO! - FRONT THUMB NOT EXISTS");
+
             }
 
-            Console.ReadLine();
+            //check/copy back
+            if (File.Exists(thumbnailsFolder + garmentNameB)
+                && collectedPaths.Contains(thumbnailsFolder + garmentNameB))
+            {
+                File.Copy(thumbnailsFolder + garmentNameB, destinationPath + garmentNameB, true);
+                thumbsCopied += 1;
+                Console.WriteLine("OK! - BACK THUMB EXISTS");
+            }
+            else
+            {
+                thumbsNon += 1;
+                badGeometries.AppendLine(" " + garmentNameB);
+                Console.WriteLine("NO! - BACK THUMB NOT EXISTS");
+            }
         }
     }
 }
