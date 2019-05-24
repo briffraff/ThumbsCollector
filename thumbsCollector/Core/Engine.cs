@@ -120,8 +120,8 @@ namespace thumbsCollector.Core
                     .Select(int.Parse)
                     .ToArray();
 
-                thumbsCopied = split[0];
-                thumbsNon = split[1];
+                thumbsCopied += split[0];
+                thumbsNon += split[1];
             }
 
             //print STATISTICS 
@@ -150,8 +150,8 @@ namespace thumbsCollector.Core
                     .Select(int.Parse)
                     .ToArray();
 
-                thumbsCopied = split[0];
-                thumbsNon = split[1];
+                thumbsCopied += split[0];
+                thumbsNon += split[1];
             }
 
             //print STATISTICS 
