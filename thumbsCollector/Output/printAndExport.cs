@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace thumbsCollector.Output
@@ -11,11 +10,9 @@ namespace thumbsCollector.Output
 
         public static void createOutputFileForEndOfSeason(string inputSeason)
         {
-            Console.WriteLine($"GENERATING LIST...");
 
             //TODO IMPLEMENTATION LOGIC FOR CREATING THIS LIST (Probably in excell sheet);
 
-            Console.WriteLine("DONE!");
         }
 
         public static string printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries,HashSet<string> geometryInUse)

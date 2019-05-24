@@ -29,7 +29,7 @@ namespace thumbsCollector.Core
             string inputSeason = getSeasonalInfo.currentSeason();
 
             Validator validator = new Validator(inputSeason);
-            validator.ValidateSeason();
+            inputSeason = validator.ValidateSeason();
             string validationPattern = validator.Pattern();
 
             //get allfiles and used geometries
@@ -45,7 +45,7 @@ namespace thumbsCollector.Core
             string destinationPath = getSeasonalInfo.DestinationTo();
 
             Console.WriteLine();
-            Console.WriteLine($"DO YOU WANT TO COLLECT ALL \"{inputSeason}\" THUMBNAILS? (Y/N)");
+            Console.WriteLine($"DO YOU WANT TO COLLECT ALL \"{inputSeason}\" THUMBNAILS? (ALL / N)");
             var isAllThumbs = getSeasonalInfo.isApproved();
 
             string frontSide = gc.frontSide;
@@ -77,12 +77,18 @@ namespace thumbsCollector.Core
             }
 
             Console.WriteLine();
-            Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y/N)");
+            Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y / N)");
             var isGenerate = getSeasonalInfo.isApproved();
 
             if (isGenerate)
             {
+                Console.WriteLine($"GENERATING LIST...");
                 printAndExport.createOutputFileForEndOfSeason(inputSeason);
+                Console.WriteLine("DONE!");
+            }
+            else
+            {
+                Console.WriteLine("OK! Have a nice day!");
             }
 
             Console.ReadLine();

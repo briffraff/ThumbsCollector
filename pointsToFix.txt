@@ -1,4 +1,2 @@
-#- ne trqbva da moje da se vuvejda prazen path (edin space naprimer)
 #- generirane na excelskata tablica
-#- problem s counter-a
 #- eventualno progressbar

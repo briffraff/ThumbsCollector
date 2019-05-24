@@ -10,7 +10,7 @@ namespace thumbsCollector.Input
     {
         //flds
         private static GlobalConstants rootPath;
-        private static DDebugg debug; 
+        private static DDebugg debug;
 
         //ctor
         public getInfo()
@@ -26,6 +26,7 @@ namespace thumbsCollector.Input
 
         public string currentSeason()
         {
+            //validation in validator class
             string season = Console.ReadLine().ToUpper();
             return season;
         }
@@ -36,19 +37,57 @@ namespace thumbsCollector.Input
             string dest = Console.ReadLine();
             string destinationPath = !dest.EndsWith("\\") ? dest + "\\" : dest;
 
+            while (dest != null)
+            {
+                bool firstChar = char.IsLetter(destinationPath[0]);
+                bool secondChar = destinationPath[1] == ':';
+                bool thirdChar = destinationPath[2] == '\\';
+
+                if (dest.Length >= 3 && firstChar && secondChar && thirdChar)
+                {
+                    break;
+                }
+
+                Console.WriteLine("UNCORRECT INPUT ! Please review and try again!");
+                Console.WriteLine();
+                dest = Console.ReadLine();
+                destinationPath = !dest.EndsWith("\\") ? dest + "\\" : dest;
+
+            }
+
             return destinationPath;
         }
 
         public bool isApproved()
         {
             string yesOrNo = Console.ReadLine().ToUpper();
-            var isApproved = yesOrNo == "Y" ? true : false;
+            var isApproved = yesOrNo == "ALL" || yesOrNo == "Y" ? true : false;
+            
+            while (yesOrNo != null)
+            {
+                if (isApproved)
+                {
+                    break;
+                }
+                else if (yesOrNo == "N")
+                {
+                    isApproved = false;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("*You must say 'Y' or 'N' !");
+
+                    yesOrNo = Console.ReadLine().ToUpper();
+                    isApproved = yesOrNo == "ALL" || yesOrNo == "Y" ? true : false;
+                }
+            }
 
             return isApproved;
         }
 
 
-        public List<string> ScanThumbsFolder(string thumbnailsFolder,string[] allowedExtensions)
+        public List<string> ScanThumbsFolder(string thumbnailsFolder, string[] allowedExtensions)
         {
             List<string> collectedPaths = new List<string>();
 

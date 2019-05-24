@@ -17,21 +17,36 @@
             return validationPattern;
         }
 
-        public void ValidateSeason()
+        public string ValidateSeason()
         {
-            string seasonSymbols = inputSeason.Remove(2);
 
-            if (seasonSymbols != "SP" || seasonSymbols != "SU" || seasonSymbols != "HO" || seasonSymbols != "FA")
+
+            while (inputSeason != null)
             {
-                if (inputSeason.Length != 4)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($"Season \"{inputSeason}\" isn't correct!");
+                string seasonSymbols = string.Empty;
 
-                    Environment.Exit(0);
+                if (inputSeason.Length >= 3)
+                {
+                    seasonSymbols = inputSeason.Remove(2);
+                }
+
+
+                if (inputSeason.Length == 4 && seasonSymbols == "SP" || seasonSymbols == "SU" || seasonSymbols == "HO" || seasonSymbols == "FA")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"Season \"{inputSeason}\" isn't correct! Try again!");
+                    Console.WriteLine();
+                    inputSeason = Console.ReadLine().ToUpper();
                 }
 
             }
+
+            Console.WriteLine("Correct!");
+            return inputSeason;
+
         }
 
     }
