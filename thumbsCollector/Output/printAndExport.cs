@@ -1,38 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace thumbsCollector.Output
 {
     public class printAndExport
     {
+
         public static void createOutputFileForEndOfSeason(string inputSeason)
         {
-            Console.WriteLine($"GENERATE LIST OF GARMENT ID/SKU/STYLE USED BY {inputSeason}:");
+            Console.WriteLine($"GENERATING LIST...");
 
             //TODO IMPLEMENTATION LOGIC FOR CREATING THIS LIST (Probably in excell sheet);
 
+            Console.WriteLine("DONE!");
         }
 
-        public static void printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries)
+        public static string printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries,HashSet<string> geometryInUse)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Thumbs copied: {thumbsCopied} = {thumbsCopied / 2} garments");
-            Console.WriteLine($"Thumbs non copied: {thumbsNon} = {thumbsNon / 2} garments");
-            Console.WriteLine();
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(Environment.NewLine);
+            sb.AppendLine($"Thumbs copied: {thumbsCopied} = {thumbsCopied / 2} garments");
+            sb.AppendLine($"Thumbs non copied: {thumbsNon} = {thumbsNon / 2} garments");
+            sb.AppendLine($"Unique geometries : {geometryInUse.Count}");
+            sb.AppendLine(Environment.NewLine);
 
             if (thumbsNon != 0)
             {
-                Console.WriteLine("[THUMBS MISSING:...");
-                Console.WriteLine();
-                Console.WriteLine(badGeometries);
+                sb.AppendLine("[THUMBS MISSING:...");
+                sb.AppendLine(Environment.NewLine);
+                sb.AppendLine(badGeometries.ToString());
             }
+
+            string result = sb.ToString().TrimEnd();
+            return result;
         }
 
-        public static void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason)
+        public static void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason,GlobalConstants gc,DDebugg debug)
         {
-            var pathToResults = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\assignmanager\ThumbsCollector\Results\";
+            var pathToResults = debug.pathToResults;
             var resultFile = $"{inputSeason.ToUpper()} - geometries.txt";
             var badFileName = $"MissingThumbs - {inputSeason.ToUpper()}.txt";
 

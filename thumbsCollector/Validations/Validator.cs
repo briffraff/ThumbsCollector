@@ -1,12 +1,6 @@
-﻿
-
-using System;
-using System.Linq;
-using Enumerable = System.Linq.Enumerable;
-
-namespace thumbsCollector.Validations
+﻿namespace thumbsCollector.Validations
 {
-    using Input;
+    using System;
 
     public class Validator
     {

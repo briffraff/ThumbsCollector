@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 
 namespace thumbsCollector.Input
@@ -11,17 +10,19 @@ namespace thumbsCollector.Input
     {
         //flds
         private static GlobalConstants rootPath;
+        private static DDebugg debug; 
 
         //ctor
         public getInfo()
         {
             rootPath = new GlobalConstants();
+            debug = new DDebugg();
         }
 
         //props
-        private string PathMW => rootPath.MenWomen;
-        private string PathYA => rootPath.YoungAthletes;
-        private string PathPS => rootPath.PlusSize;
+        private string PathMW => debug.MenWomen;
+        private string PathYA => debug.YoungAthletes;
+        private string PathPS => debug.PlusSize;
 
         public string currentSeason()
         {
@@ -61,11 +62,11 @@ namespace thumbsCollector.Input
         {
             List<string> allFiles = new List<string>();
 
-            //TODO MAKE NEXT ROWS MULTI-THREADING
+            //TODO --MAKE NEXT ROWS MULTI-THREADING
 
-            string[] filesPathsMWEQ = Directory.GetFiles(PathMW, "*.psd", SearchOption.AllDirectories); //getting the files
-            string[] filesPathsYA = Directory.GetFiles(PathYA, "*.psd", SearchOption.AllDirectories); //getting the files
-            string[] filesPathsPlusSize = Directory.GetFiles(PathPS, "*.psd", SearchOption.AllDirectories); //getting the files
+            string[] filesPathsMWEQ = Directory.GetFiles(PathMW, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
+            //string[] filesPathsYA = Directory.GetFiles(PathYA, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
+            //string[] filesPathsPlusSize = Directory.GetFiles(PathPS, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
 
             //write the paths to the empty list
             foreach (var path in filesPathsMWEQ)
@@ -73,15 +74,15 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            foreach (var path in filesPathsYA)
-            {
-                allFiles.Add(path);
-            }
+            //foreach (var path in filesPathsYA)
+            //{
+            //    allFiles.Add(path);
+            //}
 
-            foreach (var path in filesPathsPlusSize)
-            {
-                allFiles.Add(path);
-            }
+            //foreach (var path in filesPathsPlusSize)
+            //{
+            //    allFiles.Add(path);
+            //}
 
             return allFiles;
         }
