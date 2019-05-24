@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "thumbsCollector", "thumbsCollector\thumbsCollector.csproj", "{EFD74D6A-90F5-4AD2-A770-0327B8CBC907}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3339B87C-3E5A-400A-80CD-3B08151D7886}"
+	ProjectSection(SolutionItems) = preProject
+		pointsToFix.txt = pointsToFix.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
