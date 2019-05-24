@@ -33,8 +33,9 @@ namespace thumbsCollector.Core
             string validationPattern = validator.Pattern();
 
             //get allfiles and used geometries
-            var allFiles = getSeasonalInfo.AllFiles();
-            var geometryInUse = getSeasonalInfo.GeometryInUse(allFiles, validationPattern);
+            var allFilesPsd = getSeasonalInfo
+                .AllFiles(gc.psdExtension, validationPattern, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
+            var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
 
             //main thumbs folder
             string thumbnailsFolder = debug.thumbnailsFolder;
@@ -83,7 +84,11 @@ namespace thumbsCollector.Core
             if (isGenerate)
             {
                 Console.WriteLine($"GENERATING LIST...");
-                printAndExport.createOutputFileForEndOfSeason(inputSeason);
+
+                var allFilesEx = getSeasonalInfo
+                    .AllFiles(gc.jpgExtension, validationPattern, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+
+                printAndExport.createOutputFileForEndOfSeason(validationPattern, allFilesEx, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
                 Console.WriteLine("DONE!");
             }
             else

@@ -8,21 +8,6 @@ namespace thumbsCollector.Input
 {
     public class getInfo
     {
-        //flds
-        private static GlobalConstants rootPath;
-        private static DDebugg debug;
-
-        //ctor
-        public getInfo()
-        {
-            rootPath = new GlobalConstants();
-            debug = new DDebugg();
-        }
-
-        //props
-        private string PathMW => debug.MenWomen;
-        private string PathYA => debug.YoungAthletes;
-        private string PathPS => debug.PlusSize;
 
         public string currentSeason()
         {
@@ -30,7 +15,6 @@ namespace thumbsCollector.Input
             string season = Console.ReadLine().ToUpper();
             return season;
         }
-
 
         public string DestinationTo()
         {
@@ -62,7 +46,7 @@ namespace thumbsCollector.Input
         {
             string yesOrNo = Console.ReadLine().ToUpper();
             var isApproved = yesOrNo == "ALL" || yesOrNo == "Y" ? true : false;
-            
+
             while (yesOrNo != null)
             {
                 if (isApproved)
@@ -86,7 +70,6 @@ namespace thumbsCollector.Input
             return isApproved;
         }
 
-
         public List<string> ScanThumbsFolder(string thumbnailsFolder, string[] allowedExtensions)
         {
             List<string> collectedPaths = new List<string>();
@@ -97,15 +80,15 @@ namespace thumbsCollector.Input
             return collectedPaths;
         }
 
-        public List<string> AllFiles()
+        public List<string> AllFiles(string extension, string validationPattern, string PathMW, string PathYA, string PathPS)
         {
             List<string> allFiles = new List<string>();
 
             //TODO --MAKE NEXT ROWS MULTI-THREADING
 
-            string[] filesPathsMWEQ = Directory.GetFiles(PathMW, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
-            //string[] filesPathsYA = Directory.GetFiles(PathYA, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
-            //string[] filesPathsPlusSize = Directory.GetFiles(PathPS, $"*{rootPath.psdExtension}", SearchOption.AllDirectories); //getting the files
+            string[] filesPathsMWEQ = Directory.GetFiles(PathMW, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            //string[] filesPathsYA = Directory.GetFiles(PathYA, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            //string[] filesPathsPlusSize = Directory.GetFiles(PathPS, $"*{extension}", SearchOption.AllDirectories); //getting the files
 
             //write the paths to the empty list
             foreach (var path in filesPathsMWEQ)

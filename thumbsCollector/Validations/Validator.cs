@@ -13,7 +13,7 @@
 
         public string Pattern()
         {
-            string validationPattern = @"\bT_(?<garment>[N|S]\d{2}[A-Z]\d{3})_(?<season>" + inputSeason + @")_(?<category>[A-Z][A-Z])_(?<sku>.{6})-.{3}_D\b";
+            string validationPattern = @"\bT_(?<garment>[N|S]\d{2}[A-Z]\d{3})_(?<season>" + inputSeason + @")_(?<category>[A-Z][A-Z])_(?<skuStyle>.{6})-(?<colorCode>.{3})_D\b";
             return validationPattern;
         }
 

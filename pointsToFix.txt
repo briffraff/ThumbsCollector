@@ -1,2 +1,1 @@
-#- generirane na excelskata tablica
 #- eventualno progressbar

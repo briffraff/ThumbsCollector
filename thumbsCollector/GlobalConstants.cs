@@ -17,7 +17,9 @@
         public string psdExtension = ".psd"; //extension to search
         public string[] allowedExtensions = new[] { "-a.png", "-b.png" }; //allowed extensions
 
-
+        public string excelFilePath = @"............";
+        public string fileName = "_OverallSeasonStatistic";
+        public string xlsxExtension = ".xlsx";
     }
 
     public class DDebugg
@@ -27,6 +29,8 @@
        public string PlusSize = @"G:\Projects\testFolder"; // debug
        public string thumbnailsFolder = @"G:\Projects\testFolder\thumbs\"; // debug
        public string pathToResults = @"G:\Projects\testFolder\results\";
+
+       public string excelFilePath = @"G:\Projects\testFolder\results\";
 
 
     }
