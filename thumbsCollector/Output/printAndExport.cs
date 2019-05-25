@@ -10,7 +10,7 @@ namespace thumbsCollector.Output
     public class printAndExport
     {
 
-        public static void createOutputFileForEndOfSeason(string validationPattern, List<string> allFilesXlsx, string inputSeason, string fileName, string extension, string excelFilePath)
+        public void createOutputFileForEndOfSeason(string validationPattern, List<string> allFilesXlsx, string inputSeason, string fileName, string extension, string excelFilePath)
         {
 
             //start init the xlsx file
@@ -48,7 +48,7 @@ namespace thumbsCollector.Output
                     //if yes select it ,clear and overwrite 
                     seasonStatisticApp.SelectSheet(inputSeason);
                     seasonStatisticApp.ClearSheet();
-                    Console.WriteLine(seasonStatisticApp.GetSheetId());
+                    Console.WriteLine($"Overwriten tab: [{seasonStatisticApp.GetSheetId()}]");
 
                 }
 
@@ -102,7 +102,7 @@ namespace thumbsCollector.Output
             seasonStatisticApp.Close();
         }
 
-        public static string printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries, HashSet<string> geometryInUse)
+        public string printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries, HashSet<string> geometryInUse)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -123,7 +123,7 @@ namespace thumbsCollector.Output
             return result;
         }
 
-        public static void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason, GlobalConstants gc, DDebugg debug)
+        public void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason, GlobalConstants gc, DDebugg debug)
         {
             var pathToResults = debug.pathToResults;
             var resultFile = $"{inputSeason.ToUpper()} - geometries.txt";
