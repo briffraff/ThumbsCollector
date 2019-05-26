@@ -86,10 +86,10 @@ namespace thumbsCollector.Core
             {
                 Console.WriteLine($"GENERATING LIST...");
 
-                var allFilesEx = getSeasonalInfo
+                var allFilesJpg = getSeasonalInfo
                     .GetAllFiles(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
 
-                printExport.createOutputFileForEndOfSeason(validationPattern, allFilesEx, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
+                printExport.createOutputFileForEndOfSeason(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
                 Console.WriteLine("DONE!");
             }
             else
