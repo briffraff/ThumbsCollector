@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using thumbsCollector.Core.Interfaces;
 using thumbsCollector.Input;
 using thumbsCollector.Output;
@@ -37,13 +35,14 @@ namespace thumbsCollector.Core
             inputSeason = validator.ValidateSeason();
             string validationPattern = validator.Pattern();
 
+   
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo
-                .GetAllFilesAsync(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
+                .GetAllFilesParralelAsync(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
             var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
 
             var allFilesJpg = getSeasonalInfo
-                .GetAllFilesAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+                .GetAllFilesParralelAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
 
             //main thumbs folder
             string thumbnailsFolder = debug.thumbnailsFolder;
@@ -83,8 +82,6 @@ namespace thumbsCollector.Core
                     destinationPath, thumbsCopied, thumbsNon, badGeometries, collectedPaths, geometryInUse,
                     inputSeason, gc, debug, printExport));
             }
-
-
 
             Console.WriteLine();
             Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y / N)");

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace thumbsCollector.Input
@@ -123,10 +125,36 @@ namespace thumbsCollector.Input
         {
             List<string> allFilesAsync = new List<string>();
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             await GetMenWomenAsync(allFilesAsync, PathMW, extension);
             await GetYoungAthletesAsync(allFilesAsync, PathYA, extension);
             await GetPlusSizesAsync(allFilesAsync, PathPS, extension);
 
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+            return allFilesAsync;
+
+        }
+
+        public async Task<List<string>> GetAllFilesParralelAsync(string extension, string PathMW, string PathYA, string PathPS)
+        {
+            List<string> allFilesAsync = new List<string>();
+
+            List<Task> tasks = new List<Task>();
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            tasks.Add((Task.Run(() => GetMenWomenAsync(allFilesAsync, PathMW, extension))));
+            tasks.Add((Task.Run(() => GetYoungAthletesAsync(allFilesAsync, PathYA, extension))));
+            tasks.Add((Task.Run(() => GetPlusSizesAsync(allFilesAsync, PathPS, extension))));
+
+            await Task.WhenAll(tasks);
+
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
             return allFilesAsync;
         }
 
