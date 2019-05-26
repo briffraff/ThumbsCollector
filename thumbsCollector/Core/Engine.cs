@@ -35,7 +35,7 @@ namespace thumbsCollector.Core
 
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo
-                .AllFiles(gc.psdExtension, validationPattern, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
+                .GetAllFiles(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
             var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
 
             //main thumbs folder
@@ -67,7 +67,7 @@ namespace thumbsCollector.Core
             {
                 Console.WriteLine(TransferIfAll(inputGarment, frontSide, backSide, pngExtension, thumbnailsFolder,
                     destinationPath, thumbsCopied, thumbsNon, badGeometries, collectedPaths, geometryInUse,
-                    inputSeason, gc, debug,printExport));
+                    inputSeason, gc, debug, printExport));
             }
 
 
@@ -87,7 +87,7 @@ namespace thumbsCollector.Core
                 Console.WriteLine($"GENERATING LIST...");
 
                 var allFilesEx = getSeasonalInfo
-                    .AllFiles(gc.jpgExtension, validationPattern, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+                    .GetAllFiles(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
 
                 printExport.createOutputFileForEndOfSeason(validationPattern, allFilesEx, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
                 Console.WriteLine("DONE!");
@@ -144,7 +144,7 @@ namespace thumbsCollector.Core
 
         public string TransferIfAll(string inputGarment, string frontSide, string backSide, string extension, string thumbnailsFolder,
             string destinationPath, int thumbsCopied, int thumbsNon, StringBuilder badGeometries, List<string> collectedPaths,
-            HashSet<string> geometryInUse, string inputSeason, GlobalConstants gc, DDebugg debug,printAndExport printExport)
+            HashSet<string> geometryInUse, string inputSeason, GlobalConstants gc, DDebugg debug, printAndExport printExport)
         {
             thumbsCopied = 0;
             thumbsNon = 0;

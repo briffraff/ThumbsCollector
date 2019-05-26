@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace thumbsCollector.Input
 {
@@ -80,33 +81,57 @@ namespace thumbsCollector.Input
             return collectedPaths;
         }
 
-        public List<string> AllFiles(string extension, string validationPattern, string PathMW, string PathYA, string PathPS)
+        private void GetMenWomen(List<string> allFiles, string location, string extension)
         {
-            List<string> allFiles = new List<string>();
-
-            //TODO --MAKE NEXT ROWS MULTI-THREADING
-
-            string[] filesPathsMWEQ = Directory.GetFiles(PathMW, $"*{extension}", SearchOption.AllDirectories); //getting the files
-            //string[] filesPathsYA = Directory.GetFiles(PathYA, $"*{extension}", SearchOption.AllDirectories); //getting the files
-            //string[] filesPathsPlusSize = Directory.GetFiles(PathPS, $"*{extension}", SearchOption.AllDirectories); //getting the files
-
-            //write the paths to the empty list
-            foreach (var path in filesPathsMWEQ)
+            var menWomenFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            foreach (var path in menWomenFiles)
             {
                 allFiles.Add(path);
             }
 
-            //foreach (var path in filesPathsYA)
-            //{
-            //    allFiles.Add(path);
-            //}
+            Console.WriteLine($"MW - {menWomenFiles.Count()}");
 
-            //foreach (var path in filesPathsPlusSize)
-            //{
-            //    allFiles.Add(path);
-            //}
+        }
+
+        private void GetYoungAthletes(List<string> allFiles, string location, string extension)
+        {
+            var youngAthletesFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            foreach (var path in youngAthletesFiles)
+            {
+                allFiles.Add(path);
+            }
+
+            Console.WriteLine($"YA - {youngAthletesFiles.Count()}");
+        }
+
+        private void GetPlusSizes(List<string> allFiles, string location, string extension)
+        {
+
+            var plusSizesFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            foreach (var path in plusSizesFiles)
+            {
+                allFiles.Add(path);
+            }
+
+            Console.WriteLine($"PS - {plusSizesFiles.Count()}");
+        }
+
+        public List<string> GetAllFiles(string extension, string PathMW, string PathYA, string PathPS)
+        {
+            List<string> allFiles = new List<string>();
+
+            GetMenWomen(allFiles, PathMW, extension);
+            GetYoungAthletes(allFiles, PathYA, extension);
+            GetPlusSizes(allFiles, PathPS, extension);
 
             return allFiles;
+        }
+
+        public Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
+        {
+            Task<List<string>> allFilesListTask = Task.Run(async () => GetAllFiles(extension, PathMW, PathYA, PathPS));
+
+            return allFilesListTask;
         }
 
         public HashSet<string> GeometryInUse(List<string> allFiles, string validationPattern)
