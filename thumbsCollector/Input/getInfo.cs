@@ -127,11 +127,12 @@ namespace thumbsCollector.Input
             return allFiles;
         }
 
-        public Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
+        public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
         {
-            Task<List<string>> allFilesListTask = Task.Run(async () => GetAllFiles(extension, PathMW, PathYA, PathPS));
+            Task<List<string>> allFilesListTask =
+                 Task.Run(() => GetAllFiles(extension, PathMW, PathYA, PathPS));
 
-            return allFilesListTask;
+            return allFilesListTask.Result;
         }
 
         public HashSet<string> GeometryInUse(List<string> allFiles, string validationPattern)

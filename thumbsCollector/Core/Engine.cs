@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using thumbsCollector.Core.Interfaces;
 using thumbsCollector.Input;
 using thumbsCollector.Output;
@@ -84,6 +87,8 @@ namespace thumbsCollector.Core
 
             if (isGenerate)
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 Console.WriteLine($"GENERATING LIST...");
 
                 var allFilesJpg = getSeasonalInfo
@@ -91,6 +96,9 @@ namespace thumbsCollector.Core
 
                 printExport.createOutputFileForEndOfSeason(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
                 Console.WriteLine("DONE!");
+                sw.Stop();
+                Console.WriteLine(sw.Elapsed);
+
             }
             else
             {
