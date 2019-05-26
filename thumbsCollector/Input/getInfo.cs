@@ -129,18 +129,17 @@ namespace thumbsCollector.Input
 
         public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
         {
-            Task<List<string>> allFilesListTask =
-                 Task.Run(() => GetAllFiles(extension, PathMW, PathYA, PathPS));
+            List<string> allFilesListTask = await Task.Run(() => GetAllFiles(extension, PathMW, PathYA, PathPS));
 
-            return allFilesListTask.Result;
+            return allFilesListTask;
         }
 
-        public HashSet<string> GeometryInUse(List<string> allFiles, string validationPattern)
+        public HashSet<string> GeometryInUse(Task<List<string>> allFiles, string validationPattern)
         {
 
             HashSet<string> geometryInUse = new HashSet<string>();
 
-            foreach (var file in allFiles)
+            foreach (var file in allFiles.Result)
             {
                 var matches = Regex.Matches(file, validationPattern);
 

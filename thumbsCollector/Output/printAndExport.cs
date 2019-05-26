@@ -11,7 +11,7 @@ namespace thumbsCollector.Output
     public class printAndExport
     {
 
-        public void createOutputFileForEndOfSeason(string validationPattern, List<string> allFilesXlsx, string inputSeason, string fileName, string extension, string excelFilePath)
+        public void createOutputFileForEndOfSeason(string validationPattern, Task<List<string>> allFilesXlsx, string inputSeason, string fileName, string extension, string excelFilePath)
         {
 
             //start init the xlsx file
@@ -69,7 +69,7 @@ namespace thumbsCollector.Output
             //int onePercent = 100 / filesMax;
             //int percentsDone = 0;
 
-            foreach (var file in allFiles)
+            foreach (var file in allFiles.Result)
             {
                 var matches = Regex.Matches(file, validationPattern);
 

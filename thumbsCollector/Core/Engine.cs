@@ -38,7 +38,7 @@ namespace thumbsCollector.Core
 
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo
-                .GetAllFiles(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
+                .GetAllFilesAsync(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
             var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
 
             //main thumbs folder
@@ -92,7 +92,7 @@ namespace thumbsCollector.Core
                 Console.WriteLine($"GENERATING LIST...");
 
                 var allFilesJpg = getSeasonalInfo
-                    .GetAllFiles(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+                    .GetAllFilesAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
 
                 printExport.createOutputFileForEndOfSeason(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
                 Console.WriteLine("DONE!");
