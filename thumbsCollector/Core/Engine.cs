@@ -17,6 +17,7 @@ namespace thumbsCollector.Core
     {
         public void Run()
         {
+
             GlobalConstants gc = new GlobalConstants();
             DDebugg debug = new DDebugg();
             printAndExport printExport = new printAndExport();
@@ -40,6 +41,9 @@ namespace thumbsCollector.Core
             var allFilesPsd = getSeasonalInfo
                 .GetAllFilesAsync(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
             var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
+
+            var allFilesJpg = getSeasonalInfo
+                .GetAllFilesAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
 
             //main thumbs folder
             string thumbnailsFolder = debug.thumbnailsFolder;
@@ -73,13 +77,14 @@ namespace thumbsCollector.Core
                     inputSeason, gc, debug, printExport));
             }
 
-
             if (isAllThumbs == false)
             {
                 Console.WriteLine(TransferIfAllFalse(inputGarment, frontSide, backSide, pngExtension, thumbnailsFolder,
                     destinationPath, thumbsCopied, thumbsNon, badGeometries, collectedPaths, geometryInUse,
                     inputSeason, gc, debug, printExport));
             }
+
+
 
             Console.WriteLine();
             Console.WriteLine($"DO YOU WANT TO GENERATE A LIST OF GEOEMETRIES/SKUS USED BY {inputSeason} ?: (Y / N)");
@@ -91,14 +96,21 @@ namespace thumbsCollector.Core
                 sw.Start();
                 Console.WriteLine($"GENERATING LIST...");
 
-                var allFilesJpg = getSeasonalInfo
-                    .GetAllFilesAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+                while (true)
+                {
+                    if (allFilesJpg.IsCompleted == false)
+                    {
+                        continue;
+                    }
 
-                printExport.createOutputFileForEndOfSeason(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath);
+                    break;
+                }
+
+                printExport.createOutputFileForEndOfSeasonAsync(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath).Wait();
+
                 Console.WriteLine("DONE!");
                 sw.Stop();
                 Console.WriteLine(sw.Elapsed);
-
             }
             else
             {

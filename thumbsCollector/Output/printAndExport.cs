@@ -10,8 +10,8 @@ namespace thumbsCollector.Output
 {
     public class printAndExport
     {
-
-        public void createOutputFileForEndOfSeason(string validationPattern, Task<List<string>> allFilesXlsx, string inputSeason, string fileName, string extension, string excelFilePath)
+        public async Task createOutputFileForEndOfSeasonAsync(string validationPattern, Task<List<string>> allFilesXlsx,
+            string inputSeason, string fileName, string extension, string excelFilePath)
         {
 
             //start init the xlsx file
@@ -49,7 +49,7 @@ namespace thumbsCollector.Output
                     //if yes select it ,clear and overwrite 
                     seasonStatisticApp.SelectSheet(inputSeason);
                     seasonStatisticApp.ClearSheet();
-                    Console.WriteLine($"Overwriten tab: [{seasonStatisticApp.GetSheetId()}]");
+                    Console.WriteLine($"--Overwriten tab: [{seasonStatisticApp.GetSheetId()}]");
 
                 }
 
@@ -62,45 +62,45 @@ namespace thumbsCollector.Output
             seasonStatisticApp.Write(1, 1, "SKU");
             seasonStatisticApp.Write(1, 2, "STYLE");
 
-
             int row = 2;
             int col = 0;
-            //int filesMax = allFiles.Count;
-            //int onePercent = 100 / filesMax;
-            //int percentsDone = 0;
 
-            foreach (var file in allFiles.Result)
+            await Task.Run(() =>
             {
-                var matches = Regex.Matches(file, validationPattern);
-
-                foreach (Match match in matches)
+                foreach (var file in allFiles.Result)
                 {
-                    var currentGarmentId = match.Groups["garment"].ToString();
-                    var currentStyle = match.Groups["skuStyle"].ToString();
-                    var currentSku = currentStyle + "-" + match.Groups["colorCode"];
+                    var matches = Regex.Matches(file, validationPattern);
 
-                    seasonStatisticApp.Write(row, col, currentGarmentId);
-                    col++;
-                    seasonStatisticApp.Write(row, col, currentSku);
-                    col++;
-                    seasonStatisticApp.Write(row, col, currentStyle);
-                    col++;
+                    foreach (Match match in matches)
+                    {
+                        var currentGarmentId = match.Groups["garment"].ToString();
+                        var currentStyle = match.Groups["skuStyle"].ToString();
+                        var currentSku = currentStyle + "-" + match.Groups["colorCode"];
 
-                    //reset col
-                    col = 0;
+                        seasonStatisticApp.Write(row, col, currentGarmentId);
+                        col++;
+                        seasonStatisticApp.Write(row, col, currentSku);
+                        col++;
+                        seasonStatisticApp.Write(row, col, currentStyle);
+                        col++;
 
-                    //increase row
-                    row++;
+                        //reset col
+                        col = 0;
+
+                        //increase row
+                        row++;
+                    }
                 }
-            }
+            });
 
-            //counter of skus
-            seasonStatisticApp.Write(0, 3, $"COUNTER[ {seasonStatisticApp.Counter()} ]");
+                //counter of skus
+                seasonStatisticApp.Write(0, 3, $"COUNTER[ {seasonStatisticApp.Counter()} ]");
 
-            //format cells and columns
-            seasonStatisticApp.Formatting();
-            seasonStatisticApp.Save();
-            seasonStatisticApp.Close();
+                //format cells and columns
+                seasonStatisticApp.Formatting();
+                seasonStatisticApp.Save();
+                seasonStatisticApp.Close();
+
         }
 
         public string printResults(int thumbsCopied, int thumbsNon, StringBuilder badGeometries, HashSet<string> geometryInUse)

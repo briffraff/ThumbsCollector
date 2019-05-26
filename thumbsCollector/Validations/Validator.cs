@@ -37,14 +37,14 @@
                 }
                 else
                 {
-                    Console.WriteLine($"Season \"{inputSeason}\" isn't correct! Try again!");
+                    Console.WriteLine($"--Season \"{inputSeason}\" isn't correct! Try again!");
                     Console.WriteLine();
                     inputSeason = Console.ReadLine().ToUpper();
                 }
 
             }
 
-            Console.WriteLine("Correct!");
+            Console.WriteLine("--Correct!");
             return inputSeason;
 
         }

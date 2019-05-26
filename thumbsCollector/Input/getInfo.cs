@@ -24,13 +24,16 @@ namespace thumbsCollector.Input
 
             while (dest != null)
             {
-                bool firstChar = char.IsLetter(destinationPath[0]);
-                bool secondChar = destinationPath[1] == ':';
-                bool thirdChar = destinationPath[2] == '\\';
-
-                if (dest.Length >= 3 && firstChar && secondChar && thirdChar)
+                if (dest.Length >= 3)
                 {
-                    break;
+                    bool firstChar = char.IsLetter(destinationPath[0]);
+                    bool secondChar = destinationPath[1] == ':';
+                    bool thirdChar = destinationPath[2] == '\\';
+
+                    if (firstChar && secondChar && thirdChar)
+                    {
+                        break;
+                    }
                 }
 
                 Console.WriteLine("UNCORRECT INPUT ! Please review and try again!");
@@ -81,9 +84,9 @@ namespace thumbsCollector.Input
             return collectedPaths;
         }
 
-        private void GetMenWomen(List<string> allFiles, string location, string extension)
+        private async Task GetMenWomenAsync(List<string> allFiles, string location, string extension)
         {
-            var menWomenFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            var menWomenFiles = await Task.Run(() => Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories)); //getting the files
             foreach (var path in menWomenFiles)
             {
                 allFiles.Add(path);
@@ -93,9 +96,9 @@ namespace thumbsCollector.Input
 
         }
 
-        private void GetYoungAthletes(List<string> allFiles, string location, string extension)
+        private async Task GetYoungAthletesAsync(List<string> allFiles, string location, string extension)
         {
-            var youngAthletesFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            var youngAthletesFiles = await Task.Run(() => Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories)); //getting the files
             foreach (var path in youngAthletesFiles)
             {
                 allFiles.Add(path);
@@ -104,10 +107,10 @@ namespace thumbsCollector.Input
             Console.WriteLine($"YA - {youngAthletesFiles.Count()}");
         }
 
-        private void GetPlusSizes(List<string> allFiles, string location, string extension)
+        private async Task GetPlusSizesAsync(List<string> allFiles, string location, string extension)
         {
 
-            var plusSizesFiles = Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories); //getting the files
+            var plusSizesFiles = await Task.Run(() => Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories)); //getting the files
             foreach (var path in plusSizesFiles)
             {
                 allFiles.Add(path);
@@ -116,27 +119,19 @@ namespace thumbsCollector.Input
             Console.WriteLine($"PS - {plusSizesFiles.Count()}");
         }
 
-        public List<string> GetAllFiles(string extension, string PathMW, string PathYA, string PathPS)
-        {
-            List<string> allFiles = new List<string>();
-
-            GetMenWomen(allFiles, PathMW, extension);
-            GetYoungAthletes(allFiles, PathYA, extension);
-            GetPlusSizes(allFiles, PathPS, extension);
-
-            return allFiles;
-        }
-
         public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
         {
-            List<string> allFilesListTask = await Task.Run(() => GetAllFiles(extension, PathMW, PathYA, PathPS));
+            List<string> allFilesAsync = new List<string>();
 
-            return allFilesListTask;
+            await GetMenWomenAsync(allFilesAsync, PathMW, extension);
+            await GetYoungAthletesAsync(allFilesAsync, PathYA, extension);
+            await GetPlusSizesAsync(allFilesAsync, PathPS, extension);
+
+            return allFilesAsync;
         }
 
         public HashSet<string> GeometryInUse(Task<List<string>> allFiles, string validationPattern)
         {
-
             HashSet<string> geometryInUse = new HashSet<string>();
 
             foreach (var file in allFiles.Result)
