@@ -34,7 +34,6 @@ namespace thumbsCollector.Core
             Validator validator = new Validator(inputSeason);
             inputSeason = validator.ValidateSeason();
             string validationPattern = validator.Pattern();
-
    
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo

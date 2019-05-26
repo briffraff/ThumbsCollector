@@ -1,1 +1,3 @@
 #- eventualno progressbar
+#- make Navigation questions colored
+#- check if path are valid
