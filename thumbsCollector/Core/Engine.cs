@@ -37,14 +37,13 @@ namespace thumbsCollector.Core
    
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo
-                .GetAllFilesParralelAsync(gc.psdExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize); //psd search
-            var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
+                .GetAllFilesParralelAsync(gc.psdExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize); //psd search
 
             var allFilesJpg = getSeasonalInfo
-                .GetAllFilesParralelAsync(gc.jpgExtension, debug.MenWomen, debug.YoungAthletes, debug.PlusSize);
+                .GetAllFilesParralelAsync(gc.jpgExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize); //jpg search
 
             //main thumbs folder
-            string thumbnailsFolder = debug.thumbnailsFolder;
+            string thumbnailsFolder = gc.thumbnailsFolder;
 
             //enter directory where you want to save thumbs
             Console.WriteLine();
@@ -54,6 +53,8 @@ namespace thumbsCollector.Core
             Console.WriteLine();
             Console.WriteLine($"DO YOU WANT TO COLLECT ALL \"{inputSeason}\" THUMBNAILS? (ALL / N)");
             var isAllThumbs = getSeasonalInfo.isApproved();
+
+            var geometryInUse = getSeasonalInfo.GeometryInUse(allFilesPsd, validationPattern);
 
             string frontSide = gc.frontSide;
             string backSide = gc.backSide;
@@ -102,7 +103,7 @@ namespace thumbsCollector.Core
                     break;
                 }
 
-                printExport.createOutputFileForEndOfSeasonAsync(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, debug.excelFilePath).Wait();
+                printExport.createOutputFileForEndOfSeasonAsync(validationPattern, allFilesJpg, inputSeason, gc.fileName, gc.xlsxExtension, gc.excelFilePath).Wait();
 
                 Console.WriteLine("DONE!");
                 sw.Stop();

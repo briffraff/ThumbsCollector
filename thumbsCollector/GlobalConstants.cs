@@ -17,7 +17,7 @@
         public string psdExtension = ".psd"; //extension to search
         public string[] allowedExtensions = new[] { "-a.png", "-b.png" }; //allowed extensions
 
-        public string excelFilePath = @"............";
+        public string excelFilePath = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\assignmanager\ThumbsCollector\Results\";
         public string fileName = "_OverallSeasonStatistic";
         public string xlsxExtension = ".xlsx";
     }

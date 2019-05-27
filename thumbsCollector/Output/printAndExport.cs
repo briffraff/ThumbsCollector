@@ -126,7 +126,7 @@ namespace thumbsCollector.Output
 
         public void resultsToFile(HashSet<string> geometryInUse, StringBuilder badGeometries, string inputSeason, GlobalConstants gc, DDebugg debug)
         {
-            var pathToResults = debug.pathToResults;
+            var pathToResults = gc.pathToResults;
             var resultFile = $"{inputSeason.ToUpper()} - geometries.txt";
             var badFileName = $"MissingThumbs - {inputSeason.ToUpper()}.txt";
 
