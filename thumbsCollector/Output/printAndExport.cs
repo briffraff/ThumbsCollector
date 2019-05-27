@@ -108,14 +108,14 @@ namespace thumbsCollector.Output
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(Environment.NewLine);
-            sb.AppendLine($"Thumbs copied: {thumbsCopied} = {thumbsCopied / 2} garments");
-            sb.AppendLine($"Thumbs non copied: {thumbsNon} = {thumbsNon / 2} garments");
-            sb.AppendLine($"Unique geometries : {geometryInUse.Count}");
+            sb.AppendLine($"# Thumbs copied: {thumbsCopied} = {thumbsCopied / 2} garments");
+            sb.AppendLine($"# Thumbs non copied: {thumbsNon} = {thumbsNon / 2} garments");
+            sb.AppendLine($"# Unique geometries : {geometryInUse.Count}");
             sb.AppendLine(Environment.NewLine);
 
             if (thumbsNon != 0)
             {
-                sb.AppendLine("[THUMBS MISSING:...");
+                sb.AppendLine("--[THUMBS MISSING:...");
                 sb.AppendLine(Environment.NewLine);
                 sb.AppendLine(badGeometries.ToString());
             }
