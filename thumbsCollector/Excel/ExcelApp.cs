@@ -148,7 +148,7 @@ namespace thumbsCollector.Excel
 
             //merging cells
             ws.Range["A1:C1"].Merge();
-            ws.Range["D1:F1"].Merge();
+            ws.Range["D1:G1"].Merge();
 
             //allignment
             ws.Cells.HorizontalAlignment = _Excel.XlHAlign.xlHAlignCenter;
@@ -158,12 +158,13 @@ namespace thumbsCollector.Excel
 
             //season
             ws.Cells[1].EntireRow.Font.Name = "Bahnschrift";
-            ws.Cells[1].EntireRow.Font.Size = 24;
+            ws.Cells[1].EntireRow.Font.Size = 30;
             ws.Cells[1, "A"].EntireRow.Font.Color = white;
             ws.Rows[1].EntireRow.Interior.Color = black;
 
             //counter
             ws.Cells[1, "D"].Font.Color = gray;
+            ws.Cells[1].EntireRow.Font.Size = 24;
             ws.Columns.AutoFit();
 
             //title bar
