@@ -98,6 +98,7 @@ namespace thumbsCollector.Output
 
                 //format cells and columns
                 seasonStatisticApp.Formatting();
+                seasonStatisticApp.SortAscending($"{seasonStatisticApp.Counter()}");
                 seasonStatisticApp.Save();
                 seasonStatisticApp.Close();
 

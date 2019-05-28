@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using System;
+using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
 
 namespace thumbsCollector.Excel
@@ -138,6 +139,24 @@ namespace thumbsCollector.Excel
             ws = wb.Sheets[inputSeason];
         }
 
+        public void SortAscending(string lastRow)
+        {
+            _Excel.Range oRng;
+
+            //Get Entire Range of Data
+            oRng = (_Excel.Range)ws.Range["A3", $"C{lastRow}"];
+
+            //Sort the range based on First Columns And 6th (in this case A and F)
+            oRng.Sort(oRng.Columns[1, Type.Missing], _Excel.XlSortOrder.xlAscending, // the first sort key Column 1 for Range
+                oRng.Columns[3, Type.Missing], Type.Missing, _Excel.XlSortOrder.xlAscending,// second sort key Column 6 of the range
+                Type.Missing, _Excel.XlSortOrder.xlAscending,  // third sort key nothing, but it wants one
+                _Excel.XlYesNoGuess.xlGuess, Type.Missing, Type.Missing,
+                _Excel.XlSortOrientation.xlSortColumns, _Excel.XlSortMethod.xlPinYin,
+                _Excel.XlSortDataOption.xlSortNormal,
+                _Excel.XlSortDataOption.xlSortNormal,
+                _Excel.XlSortDataOption.xlSortNormal);
+        }
+
         public void Formatting()
         {
             //colors
@@ -164,7 +183,7 @@ namespace thumbsCollector.Excel
 
             //counter
             ws.Cells[1, "D"].Font.Color = gray;
-            ws.Cells[1].EntireRow.Font.Size = 24;
+            ws.Cells[1, "D"].Font.Size = 24;
             ws.Columns.AutoFit();
 
             //title bar
@@ -173,7 +192,6 @@ namespace thumbsCollector.Excel
             ws.Range["A2:C2"].Font.Bold = true;
             ws.Range["A2:C2"].ColumnWidth = 15;
             ws.Rows[2].EntireRow.Interior.Color = lightGray;
-
         }
 
 
