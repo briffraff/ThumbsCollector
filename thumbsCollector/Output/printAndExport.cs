@@ -93,14 +93,26 @@ namespace thumbsCollector.Output
                 }
             });
 
-                //counter of skus
-                seasonStatisticApp.Write(0, 3, $"COUNTER[ {seasonStatisticApp.Counter()} ]");
+            //counter of skus
+            seasonStatisticApp.Write(0, 3, $"COUNTER[ {seasonStatisticApp.Counter()} ]");
 
-                //format cells and columns
-                seasonStatisticApp.Formatting();
-                seasonStatisticApp.SortAscending($"{seasonStatisticApp.Counter()}");
-                seasonStatisticApp.Save();
-                seasonStatisticApp.Close();
+            //format cells and columns
+            seasonStatisticApp.Formatting();
+
+            //range to sort
+            var startColumn = "A";
+            var startRow = 3;
+            var endColumn = "C";
+            var endRow = seasonStatisticApp.Counter(); //last row number
+            bool isSorting = endRow > 1; // if true 
+
+            if (isSorting)
+            {
+                seasonStatisticApp.SortAscending(startColumn, startRow, endColumn, endRow);
+            }
+
+            seasonStatisticApp.Save();
+            seasonStatisticApp.Close();
 
         }
 

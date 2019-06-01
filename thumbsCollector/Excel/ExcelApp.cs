@@ -139,12 +139,12 @@ namespace thumbsCollector.Excel
             ws = wb.Sheets[inputSeason];
         }
 
-        public void SortAscending(string lastRow)
+        public void SortAscending(string startColumn, int startRow, string endColumn, int endRow)
         {
             _Excel.Range oRng;
 
             //Get Entire Range of Data
-            oRng = (_Excel.Range)ws.Range["A3", $"C{lastRow}"];
+            oRng = (_Excel.Range)ws.Range[$"{startColumn}{startRow}", $"{endColumn}{endRow}"];
 
             //Sort the range based on First Columns And 6th (in this case A and F)
             oRng.Sort(oRng.Columns[1, Type.Missing], _Excel.XlSortOrder.xlAscending, // the first sort key Column 1 for Range
