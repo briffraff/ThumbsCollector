@@ -1,3 +1,2 @@
 #- eventualno progressbar
 #- make Navigation questions colored
-#- check counter width whit bug numbers
