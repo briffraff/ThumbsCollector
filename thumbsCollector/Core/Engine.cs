@@ -37,10 +37,10 @@ namespace thumbsCollector.Core
    
             //get allfiles and used geometries
             var allFilesPsd = getSeasonalInfo
-                .GetAllFilesParralelAsync(gc.psdExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize); //psd search
+                .GetAllFilesParralelAsync(gc.psdExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize, gc.Matternity, gc.YAPS); //psd search
 
             var allFilesJpg = getSeasonalInfo
-                .GetAllFilesParralelAsync(gc.jpgExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize); //jpg search
+                .GetAllFilesParralelAsync(gc.jpgExtension, gc.MenWomen, gc.YoungAthletes, gc.PlusSize, gc.Matternity, gc.YAPS); //jpg search
 
             //main thumbs folder
             string thumbnailsFolder = gc.thumbnailsFolder;

@@ -2,11 +2,13 @@
 {
     public class GlobalConstants
     {
-        public string MenWomen = @"M:\MD_N\Garments"; // the root folder for Men-Women-Equipment Garments
-        public string YoungAthletes = @"M:\MD_N\Garments YA"; // the root folder for Young Athletes Garments
-        public string PlusSize = @"M:\MD_N\Garments PS"; // the root folder for PlusSize Garments
+        public string MenWomen = @"N:\Garments"; // the root folder for Men-Women-Equipment Garments
+        public string YoungAthletes = @"N:\Garments YA"; // the root folder for Young Athletes Garments
+        public string PlusSize = @"N:\Garments PS"; // the root folder for PlusSize Garments
+        public string Matternity = @"N:\Garments MA";
+        public string YAPS = @"N:\Garments YAPS";
 
-        public string thumbnailsFolder = @"M:\MD_N\Thumbs\";
+        public string thumbnailsFolder = @"N:\MD_N\Thumbs\";
         public string pathToResults = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\assignmanager\ThumbsCollector\Results\";
 
 

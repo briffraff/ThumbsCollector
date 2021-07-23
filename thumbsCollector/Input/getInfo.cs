@@ -121,7 +121,31 @@ namespace thumbsCollector.Input
             Console.WriteLine($"PS - {plusSizesFiles.Count()}");
         }
 
-        public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS)
+        private async Task GetMAternityAsync(List<string> allFiles, string location, string extension)
+        {
+
+            var maternityFiles = await Task.Run(() => Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories)); //getting the files
+            foreach (var path in maternityFiles)
+            {
+                allFiles.Add(path);
+            }
+
+            Console.WriteLine($"MA - {maternityFiles.Count()}");
+        }
+
+        private async Task GetYAPSAsync(List<string> allFiles, string location, string extension)
+        {
+
+            var yapsFiles = await Task.Run(() => Directory.GetFiles(location, $"*{extension}", SearchOption.AllDirectories)); //getting the files
+            foreach (var path in yapsFiles)
+            {
+                allFiles.Add(path);
+            }
+
+            Console.WriteLine($"YAPS - {yapsFiles.Count()}");
+        }
+
+        public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS, string PathMA, string PathYAPS)
         {
             List<string> allFilesAsync = new List<string>();
 
@@ -131,6 +155,9 @@ namespace thumbsCollector.Input
             await GetMenWomenAsync(allFilesAsync, PathMW, extension);
             await GetYoungAthletesAsync(allFilesAsync, PathYA, extension);
             await GetPlusSizesAsync(allFilesAsync, PathPS, extension);
+            await GetMAternityAsync(allFilesAsync, PathMA, extension);
+            await GetYAPSAsync(allFilesAsync, PathYAPS, extension);
+
 
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
@@ -138,7 +165,7 @@ namespace thumbsCollector.Input
 
         }
 
-        public async Task<List<string>> GetAllFilesParralelAsync(string extension, string PathMW, string PathYA, string PathPS)
+        public async Task<List<string>> GetAllFilesParralelAsync(string extension, string PathMW, string PathYA, string PathPS, string PathMA, string PathYAPS)
         {
             List<string> allFilesAsync = new List<string>();
 
@@ -150,6 +177,9 @@ namespace thumbsCollector.Input
             tasks.Add((Task.Run(() => GetMenWomenAsync(allFilesAsync, PathMW, extension))));
             tasks.Add((Task.Run(() => GetYoungAthletesAsync(allFilesAsync, PathYA, extension))));
             tasks.Add((Task.Run(() => GetPlusSizesAsync(allFilesAsync, PathPS, extension))));
+            tasks.Add((Task.Run(() => GetMAternityAsync(allFilesAsync, PathMA, extension))));
+            tasks.Add((Task.Run(() => GetYAPSAsync(allFilesAsync, PathYAPS, extension))));
+
 
             await Task.WhenAll(tasks);
 
