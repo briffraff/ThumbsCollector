@@ -38,7 +38,7 @@ namespace thumbsCollector.Input
                     }
                 }
 
-                Console.WriteLine("UNCORRECT INPUT ! Please review and try again!");
+                Console.WriteLine("INCORRECT INPUT ! Please review and try again!");
                 Console.WriteLine();
                 dest = Console.ReadLine();
                 destinationPath = !dest.EndsWith("\\") ? dest + "\\" : dest;
@@ -94,7 +94,7 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            Console.WriteLine($"MW - {menWomenFiles.Count()}");
+            //Console.WriteLine($"MW - {menWomenFiles.Count()}");
 
         }
 
@@ -106,7 +106,7 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            Console.WriteLine($"YA - {youngAthletesFiles.Count()}");
+            //Console.WriteLine($"YA - {youngAthletesFiles.Count()}");
         }
 
         private async Task GetPlusSizesAsync(List<string> allFiles, string location, string extension)
@@ -118,7 +118,7 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            Console.WriteLine($"PS - {plusSizesFiles.Count()}");
+            //Console.WriteLine($"PS - {plusSizesFiles.Count()}");
         }
 
         private async Task GetMAternityAsync(List<string> allFiles, string location, string extension)
@@ -130,7 +130,7 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            Console.WriteLine($"MA - {maternityFiles.Count()}");
+            //Console.WriteLine($"MA - {maternityFiles.Count()}");
         }
 
         private async Task GetYAPSAsync(List<string> allFiles, string location, string extension)
@@ -142,7 +142,7 @@ namespace thumbsCollector.Input
                 allFiles.Add(path);
             }
 
-            Console.WriteLine($"YAPS - {yapsFiles.Count()}");
+            //Console.WriteLine($"YAPS - {yapsFiles.Count()}");
         }
 
         public async Task<List<string>> GetAllFilesAsync(string extension, string PathMW, string PathYA, string PathPS, string PathMA, string PathYAPS)
@@ -184,7 +184,7 @@ namespace thumbsCollector.Input
             await Task.WhenAll(tasks);
 
             sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
+            //Console.WriteLine(sw.ElapsedMilliseconds);
             return allFilesAsync;
         }
 

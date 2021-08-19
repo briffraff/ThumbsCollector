@@ -8,7 +8,7 @@
         public string Matternity = @"N:\Garments MA";
         public string YAPS = @"N:\Garments YAPS";
 
-        public string thumbnailsFolder = @"N:\MD_N\Thumbs\";
+        public string thumbnailsFolder = @"N:\Thumbs\";
         public string pathToResults = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\assignmanager\ThumbsCollector\Results\";
 
 

@@ -8,6 +8,7 @@ using thumbsCollector.Core.Interfaces;
 using thumbsCollector.Input;
 using thumbsCollector.Output;
 using thumbsCollector.Validations;
+using System.Security.Principal;
 
 namespace thumbsCollector.Core
 {
@@ -62,9 +63,96 @@ namespace thumbsCollector.Core
             string[] allowedExtensions = gc.allowedExtensions;
             int thumbsCopied = 0;
             int thumbsNon = 0;
+            int thumbsAutoTransferA = 0;
+            int thumbsAutoTransferB = 0;
 
             ////Scan thumbs folder
             List<string> collectedPaths = getSeasonalInfo.ScanThumbsFolder(thumbnailsFolder, allowedExtensions);
+
+
+            // Normalize thumb's folder - transfer all not transfered thumbnails from maps folders of the garments
+            var filepaths = allFilesPsd.Result
+                .Select(x => Path.GetDirectoryName(x))
+                .Select(x=>x.Replace("Maps","Renders"))
+                .Distinct();
+
+            Console.WriteLine();
+            Console.WriteLine("AUTO RE-FILL:");
+            Console.WriteLine();
+
+
+            foreach (var filepath in filepaths)
+            {
+                var isFolderExists = Directory.Exists(filepath) ? true : false;
+                var renderFolder = isFolderExists ? filepath : filepath.Replace("Renders", "Render");
+
+                // Any other folder couldnt exists except Renders or Render
+                if (Directory.Exists(renderFolder))
+                {
+                    var currentRenders = Directory.GetFiles(renderFolder, "*.png");
+                    var pngfilesInFolder = currentRenders.Count();
+
+                    if (pngfilesInFolder == 2)
+                    {
+                        //remove The last folder name and split
+                        var garmentPath = (renderFolder.EndsWith("Renders")
+                                ? renderFolder.Replace("Renders", "")
+                                : renderFolder.Replace("Render", ""))
+                            .Split("\\".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToArray();
+
+                        //get garment folder name , split and get garment code
+                        var garmentCode = garmentPath[garmentPath.Length - 1]
+                            .Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+
+                        var frontT = garmentCode + gc.frontSide + ".png";
+                        var backT = garmentCode + gc.backSide + ".png";
+
+                        //check if the same file exists in thumbs folder
+                        var isFrontExists = File.Exists(thumbnailsFolder + frontT);
+                        var isBackExists = File.Exists(thumbnailsFolder + backT);
+
+
+                        if (!isFrontExists && currentRenders.Contains(Path.Combine(renderFolder, frontT)))
+                        {
+                            var srcFile = Path.Combine(renderFolder, frontT);
+                            var destFile = Path.Combine(thumbnailsFolder, frontT);
+
+                            var infoOwner = File.GetAccessControl(srcFile)
+                                .GetOwner(typeof(NTAccount)).Value
+                                .Replace("PIXELPOOL","");
+
+                            File.Copy(srcFile, destFile);
+                            Console.WriteLine("front : {0} - {1}",destFile,infoOwner);
+                            thumbsAutoTransferA += 1;
+                        }
+
+                        if (!isBackExists && currentRenders.Contains(Path.Combine(renderFolder, backT)))
+                        {
+                            var srcFile = Path.Combine(renderFolder, backT);
+                            var destFile = Path.Combine(thumbnailsFolder, backT);
+
+                            var infoOwner = File.GetAccessControl(srcFile)
+                                .GetOwner(typeof(NTAccount)).Value
+                                .Replace("PIXELPOOL","");
+
+                            File.Copy(srcFile, destFile);
+                            Console.WriteLine("back : {0} - {1}",destFile,infoOwner);
+                            thumbsAutoTransferB += 1;
+                        }
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("transfered: ");
+            Console.WriteLine(" => frontside : " + thumbsAutoTransferA);
+            Console.WriteLine(" => backside : " + thumbsAutoTransferB);
+
+            Console.ReadLine();
+
             StringBuilder badGeometries = new StringBuilder();
 
             string inputGarment = "";
@@ -168,7 +256,7 @@ namespace thumbsCollector.Core
 
             foreach (var geometry in geometryInUse)
             {
-                //input garment code
+                //input garment path
                 inputGarment = geometry;
 
                 string splitThumbCounts = TransferCopies(inputGarment, frontSide, backSide, extension, thumbnailsFolder,
